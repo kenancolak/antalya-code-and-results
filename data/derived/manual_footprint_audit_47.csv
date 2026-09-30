@@ -1,0 +1,48 @@
+arcgis_grid_id,manual_label,net_change_m2,added_m2,removed_m2
+1,Serbest Bölge,365,365,0
+2,Serbest Bölge,1444,1444,0
+3,Liman Mahallesi,2309,2309,0
+4,Liman Mahallesi,208,208,0
+5,Fener Mahallesi,295,887,592
+6,Fener Mahallesi,379,379,0
+7,Fener Mahallesi,404,622,218
+8,Hurma Mahallesi,947,947,0
+9,Hurma Mahallesi,0,0,0
+16,Pınarbaşı Mahallesi,105,105,0
+19,Muratpaşa Mahallesi,628,1001,373
+24,Çaybaşı Mahallesi,1494,1494,0
+26,Balbey Mahallesi,-125,0,125
+27,Balbey Mahallesi,328,328,0
+28,Yüksekalan Mahallesi,854,854,0
+29,Meltem Mahallesi,163,833,670
+30,Muratpaşa Mahallesi,984,984,0
+31,Havaalanı,0,0,0
+32,Soğuksu Mahallesi,776,776,0
+33,Soğuksu Mahallesi,-271,0,271
+34,Sigorta Mahallesi,325,325,0
+36,Sigorta Mahallesi,1119,1119,0
+37,Sigorta Mahallesi,730,730,0
+38,Küçük Sanayi,0,0,0
+39,Küçük Sanayi,0,0,0
+41,Şafak Mahallesi,880,880,0
+42,Şafak Mahallesi,340,340,0
+43,Küçük Sanayi,0,0,0
+44,Havaalanı,2745,10871,8126
+47,Özgürlük Mahallesi,0,0,0
+48,Özgürlük Mahallesi,226,226,0
+49,Kızılarık Mahallesi,0,0,0
+50,Havaalanı,0,0,0
+53,Özgürlük Mahallesi,123,123,0
+54,Özgürlük Mahallesi,0,0,0
+55,Havaalanı,0,0,0
+57,Özgürlük Mahallesi,0,0,0
+65,Yeni Sanayi,0,0,0
+66,Yeni Sanayi,0,0,0
+67,Hal,0,0,0
+71,Yeni Sanayi,0,0,0
+72,Hal,0,0,0
+73,Yeni Sanayi,240,240,0
+80,Kuzeyyaka Mahallesi,0,0,0
+81,Yeni Sanayi,-351,717,1068
+82,Yeni Sanayi,0,0,0
+83,Kuzeyyaka Mahallesi,196,196,0

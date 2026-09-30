@@ -1,27 +1,29 @@
 cff-version: 1.2.0
-message: "Please cite this repository when using the archived code or derived result tables, and cite the associated article when referring to the scientific findings."
-title: "Antalya retained-core LST study: code and derived results"
+message: "If you use this code or the derived data, please cite the archived repository release and the associated article."
+title: "Reproducibility package for Urban–Forest Land Surface Temperature Change under Stability and Purity Constraints: Antalya, 2017–2025"
 type: software
-version: "1.0.0"
-repository-code: "https://github.com/kenancolak/antalya-code-and-results"
+version: 2.0.1
+date-released: 2026-09-29
+doi: 10.5281/zenodo.21836778
 authors:
   - family-names: "Çolak"
     given-names: "Kenan"
-    affiliation: "Department of City and Regional Planning, Faculty of Architecture, Akdeniz University, Antalya, Türkiye"
-    email: "kenancolaktr@gmail.com"
+    affiliation: "Department of City and Regional Planning, Akdeniz University"
   - family-names: "Gençel"
     given-names: "Ziya"
-    affiliation: "Department of City and Regional Planning, Faculty of Architecture, Akdeniz University, Antalya, Türkiye"
+    affiliation: "Department of City and Regional Planning, Akdeniz University"
 keywords:
-  - land cover stability
   - land surface temperature
   - surface urban heat island
-  - retained cores
-  - Google Earth Engine
+  - land-cover stability
+  - urban morphology
+  - building coverage ratio
+  - Sentinel-2
+  - Landsat
   - Antalya
 preferred-citation:
   type: article
-  title: "Reducing Land Cover Ambiguity in Long Term Surface Urban Heat Assessment: A Retained Core Grid Approach in Antalya, Türkiye"
+  title: "Urban–Forest Land Surface Temperature Change under Stability and Purity Constraints: Antalya, 2017–2025"
   authors:
     - family-names: "Çolak"
       given-names: "Kenan"

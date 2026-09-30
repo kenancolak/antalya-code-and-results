@@ -1,8 +1,8 @@
 # Antalya retained-core LST study: code and derived results
 
-This repository accompanies the study **“Reducing Land Cover Ambiguity in Long Term Surface Urban Heat Assessment: A Retained Core Grid Approach in Antalya, Türkiye”** by Kenan Çolak and Ziya Gençel.
+This repository accompanies the study **“Urban–Forest Land Surface Temperature Change under Stability and Purity Constraints: Antalya, 2017–2025”** by Kenan Çolak and Ziya Gençel.
 
-It archives the Google Earth Engine (GEE) scripts used to document the analytical workflow and a selected set of derived tables supporting the reported results. The repository is intended for **methodological transparency, inspection of analytical settings, and access to the archived outputs**.
+The repository contains the Google Earth Engine (GEE) workflow, an independent R check of the endpoint statistics, Python scripts for the released-table analyses, and the derived tables used for the endpoint, meteorological, annual-stability, morphology, and footprint-audit results.
 
 ## Repository structure
 
@@ -10,55 +10,36 @@ It archives the Google Earth Engine (GEE) scripts used to document the analytica
 .
 ├── README.md
 ├── CITATION.cff
+├── CHANGELOG.md
+├── VERSION
+├── LICENSE_CODE
+├── LICENSE_DATA
+├── requirements.txt
 ├── scripts/
-│   ├── 01_landcover_stability.js
-│   └── 02_thermal_dlst.js
+│   ├── gee/
+│   ├── r/
+│   └── python/
 ├── data/
 │   └── derived/
-│       ├── endpoint_core_grid_stats.csv
-│       ├── endpoint_threshold_sensitivity.csv
-│       ├── annual_grid_stats.csv
-│       ├── annual_threshold_calibration.csv
-│       ├── annual_threshold_sensitivity.csv
-│       ├── thermal_primary_retained_cores.csv
-│       ├── thermal_scenarios_retained_cores.csv
-│       ├── endpoint_threshold_dlst_summary.csv
-│       ├── landsat_scene_metadata.csv
-│       └── reference_class_lulc_lst_summary.csv
+├── results/
 └── docs/
     ├── REPOSITORY_SCOPE.md
     ├── ASSET_MANIFEST.md
-    └── DATA_DICTIONARY.md
+    ├── DATA_DICTIONARY.md
+    ├── RUNNING_THE_CODE.md
+    └── VALIDATION_REPORT.md
 ```
 
-## Analysis scripts
+## Analysis sample
 
-### `scripts/01_landcover_stability.js`
+- Initial rectangular grid: 3,060 cells
+- Eligible terrestrial population after Urban Atlas, coverage, sea, and inland-water exclusions: 2,190 cells
+- Endpoint-retained cores: 47 urban (UU), 17 forest (FF), 4 agriculture (AA), 15 bare surface (BB), and 0 greenhouse (GG); 83 total
+- Final SCL-p95 morphology population: 40 UU cells
+- Landsat audit: 75 June–August acquisitions during 2017–2025
+- Meteorological model: 60 acquisitions, 64 cores, and 3,823 core–acquisition observations
 
-Documents the Sentinel-2 land-cover classification workflow, accuracy assessment, endpoint retained-core screening, endpoint-threshold sensitivity, and annual spectral diagnostics.
-
-### `scripts/02_thermal_dlst.js`
-
-Documents the Landsat Collection 2 Level 2 surface-temperature workflow, common-pixel endpoint comparison, thermal-support scenarios, and thermal output tables.
-
-The scripts retain the study asset identifiers, run identifiers, thresholds, scene dates, class codes, and export logic used in the archived workflow.
-
-## Derived result tables
-
-| File | Rows | Contents |
-|---|---:|---|
-| `endpoint_core_grid_stats.csv` | 2,301 | Endpoint class fractions, data-support metrics, purity/change metrics, and retained-core status |
-| `endpoint_threshold_sensitivity.csv` | 24 | Retained-class counts across endpoint change/purity threshold combinations |
-| `annual_grid_stats.csv` | 2,301 | Annual spectral diagnostics and annual urban-stability flags |
-| `annual_threshold_calibration.csv` | 3 | Percentile-based annual spectral threshold calibration |
-| `annual_threshold_sensitivity.csv` | 12 | Annual-stability sensitivity combinations and retained counts |
-| `thermal_primary_retained_cores.csv` | 83 | Primary LST results for the default retained-core set |
-| `thermal_scenarios_retained_cores.csv` | 332 | Four thermal-support scenarios for the 83 retained cores |
-| `endpoint_threshold_dlst_summary.csv` | 96 | Thermal summaries and urban–forest contrasts across endpoint thresholds and thermal scenarios |
-| `landsat_scene_metadata.csv` | 6 | Metadata for the six Landsat scenes in the primary three-scene-per-endpoint comparison |
-| `reference_class_lulc_lst_summary.csv` | 3 | Reference-class LST summaries used for contextual comparison |
-
-The CSV files are archived analysis outputs. Public file names were shortened for readability; their numeric contents were not recalculated during repository preparation.
+`endpoint_grid_stats_pre_inland_water_2301.csv` contains the 2,301 cells remaining after the Urban Atlas, coverage, and sea exclusions. The ArcGIS inland-water overlay subsequently removed 111 cells. None of the 83 retained cores intersected those additional exclusions. The file name records this intermediate stage; the final eligible terrestrial population contains 2,190 cells.
 
 ## Main analytical settings
 
@@ -66,6 +47,7 @@ The CSV files are archived analysis outputs. Public file names were shortened fo
 - Grid unit: 300 × 300 m
 - Projected analysis CRS: EPSG:32636
 - Sentinel-2 collection: `COPERNICUS/S2_SR_HARMONIZED`
+- Endpoint classification predictors: B2, B3, B4, B5, B6, B7, B8, B11, B12, NDVI, NDBI, NDWI, BSI, and TCB
 - Random Forest trees: 500
 - Random Forest bag fraction: 0.632
 - Random seed: 42
@@ -73,38 +55,86 @@ The CSV files are archived analysis outputs. Public file names were shortened fo
 - Common endpoint support threshold: 0.98
 - Endpoint change threshold: 0.10
 - Endpoint class-purity threshold: 0.85
-- Default annual spectral calibration percentile: 95th percentile
-- Landsat WRS path/row: 178/34
+- Final annual cloud mask: SCL classes 2, 4, 5, and 6
+- Annual spectral calibration: empirical p95 thresholds from 74,431 fully supported pixels
+- Annual unstable-pixel limit: 0.10
+- Landsat WRS path/row: 178/034
 - Landsat collections: `LANDSAT/LC08/C02/T1_L2` and `LANDSAT/LC09/C02/T1_L2`
 
-## Archived result checkpoints
+## Results reported in the article
 
-The archived tables contain the following principal checkpoints:
+- Overall classification accuracy: 85.2% in 2017 and 86.6% in 2025
+- Cohen’s kappa: 0.815 in 2017 and 0.833 in 2025
+- Mean endpoint ΔLST: 2.144 °C for UU and 1.050 °C for FF
+- Raw UU–FF mean ΔLST contrast: 1.094 °C
+- Cell-level Welch 95% CI: 0.714–1.474 °C; p = 8.50 × 10⁻⁷
+- Primary weather-adjusted divergence: 0.791 °C
+- Weather-adjusted 95% CI: 0.037–1.546 °C; p = 0.040
+- Current BCR–ΔLST Spearman correlation in the 40-cell SCL-p95 population: ρ = 0.569
+- Baseline-proxy BCR–ΔLST correlation: ρ = 0.547
+- Net BCR-change correlation: ρ = −0.042
+- Current BCR–ΔLST correlation among 17 cells with no detected footprint change: ρ = 0.738
 
-- Overall classification accuracy: 0.852 (2017) and 0.866 (2025)
-- Cohen's kappa: 0.815 (2017) and 0.8325 (2025)
-- Default retained cores: 47 UU, 17 FF, 4 AA, 0 GG, and 15 BB; 83 total
-- Urban endpoint cores retained after the annual spectral diagnostic: 43
-- Primary mean ΔLST: 2.144 °C for UU and 1.050 °C for FF
-- Primary UU − FF mean ΔLST contrast: 1.094 °C
-- Welch 95% confidence interval for the primary UU − FF contrast: 0.714 to 1.474 °C
-- Welch p-value: 8.50 × 10⁻⁷
+The archived endpoint confusion matrices underlying the accuracy and kappa checkpoints are provided in `data/derived/classification_validation_confusion_matrices.csv`.
 
-## Scope of the archive
+## What can be run from this repository
 
-The repository does not redistribute public Sentinel-2 or Landsat imagery. Dataset identifiers and processing logic are recorded in the scripts, and the primary Landsat scene metadata are included in `data/derived/landsat_scene_metadata.csv`.
+- The Python scripts rerun the endpoint, meteorological, morphology, and footprint-audit calculations from the released derived tables.
+- The base-R script provides an independent check of the cell-level UU–FF endpoint statistics.
+- The GEE scripts document the upstream geospatial processing and retain the private asset identifiers used in the study. Those stages require authorised access to the non-redistributed inputs.
+- Script 01 also includes an optional classifier run against the current Sentinel-2 catalogue. It is provided as a diagnostic because catalogue changes mean that it may not reproduce the original map/validation pairing. The original confusion matrices are included as a derived table.
 
-Several study-created inputs referenced by the scripts—including the study boundary, fixed grid, training and validation data, and canonical endpoint land-cover assets—are not included in this archive. The original GEE paths are retained as provenance information. Accordingly, the repository documents the workflow and preserves selected outputs; it is not presented as a self-contained executable replication package.
+## Execution
 
-Additional documentation is provided in:
+The Python reproductions can be run directly from the repository root:
 
-- `docs/REPOSITORY_SCOPE.md` — archive purpose and boundaries;
-- `docs/ASSET_MANIFEST.md` — principal input dependencies; and
-- `docs/DATA_DICTIONARY.md` — definitions of the main released fields.
+```bash
+python -m pip install -r requirements.txt
+python scripts/python/01_validate_release.py
+python scripts/python/02_weather_adjusted_models.py
+python scripts/python/03_morphology_analysis.py
+python scripts/python/04_footprint_audit_analysis.py
+```
+
+The independent base-R endpoint check can be run with:
+
+```bash
+Rscript scripts/r/01_endpoint_statistics.R
+```
+
+The GEE scripts require access to non-redistributed study-created assets. Their identifiers are retained as provenance information, but public access to the repository does not confer access to those assets.
+
+Detailed Windows PowerShell commands and expected checkpoints are provided in `docs/RUNNING_THE_CODE.md`.
+
+## Checks performed before release
+
+The release was checked on 29 September 2026. The Python scripts returned 83 retained cores, the 40-cell morphology population, 60 model acquisitions, and 3,823 observations. Runs made with access to the study GEE assets returned:
+
+- 47 UU, 17 FF, 4 AA, 15 BB, and 0 GG endpoint cores;
+- 83 default retained-core rows and 332 rows across four endpoint-support scenarios;
+- 75 JJA Landsat 8/9 candidate acquisitions;
+- 74,431 fully supported annual-calibration pixels;
+- 13, 40, and 44 UU cores under the SCL-p90, p95, and p97 screens; and
+- six 2017 scene-meteorology rows and 384 unfiltered 2017 core–scene rows in the year-split export test.
+
+## Archive scope
+
+The repository does not redistribute Sentinel-2, Landsat, ERA5-Land, SRTM, Urban Atlas, Microsoft Global Building Footprints, or Esri World Imagery Wayback source data. It also does not redistribute training and validation geometries, high-resolution reference imagery, restricted municipal building data, source building-footprint geometries, or the original boundary and water-mask layers.
+
+The released tables are derived analysis outputs. They allow the reported statistical analyses to be rerun, but the repository is not a self-contained copy of every upstream geospatial input.
 
 ## Citation
 
-Citation metadata are provided in `CITATION.cff`. When a versioned archival DOI is available for this repository, that DOI identifies the corresponding release.
+Citation metadata are provided in `CITATION.cff`. The all-versions Zenodo DOI is:
+
+`https://doi.org/10.5281/zenodo.21836778`
+
+## Licences
+
+- Code in `scripts/`: MIT License (`LICENSE_CODE`)
+- Derived tables and documentation: CC BY 4.0 (`LICENSE_DATA`)
+
+Third-party source datasets remain governed by their respective providers’ terms.
 
 ## Contact
 

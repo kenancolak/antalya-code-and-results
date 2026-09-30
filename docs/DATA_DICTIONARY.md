@@ -1,82 +1,139 @@
 # Data dictionary
 
-This dictionary defines the principal fields needed to interpret the released result tables. Some CSV files retain additional Earth Engine or GIS export fields for provenance.
+## Classification validation
 
-## Identifier and endpoint-classification fields
+### `classification_validation_confusion_matrices.csv`
 
-| Field | Meaning | Unit / coding |
+Each row is one reference class from an independent, class-balanced endpoint validation sample. The five `predicted_*` columns form the corresponding confusion-matrix row. Row totals are 200; each year contains 1,000 observations.
+
+| Field | Meaning |
+|---|---|
+| `year` | Endpoint validation year |
+| `reference_class_code`, `reference_class_label` | Reference class |
+| `predicted_urban` … `predicted_bare` | Counts assigned to each mapped class |
+| `reference_total`, `correct` | Row total and diagonal count |
+| `producer_accuracy_pct` | Correct divided by the reference-class total |
+| `overall_accuracy_pct`, `kappa` | Year-level balanced-sample checkpoints repeated across the five class rows |
+
+## Population and endpoint tables
+
+### `eligible_population_construction.csv`
+
+| Field | Meaning |
+|---|---|
+| `stage` | Sequential eligibility step |
+| `cells_excluded` | Cells removed at the step |
+| `cells_remaining` | Cells remaining after the step |
+
+### `endpoint_grid_stats_pre_inland_water_2301.csv`
+
+This table predates the 111-cell inland-water exclusion.
+
+| Field | Meaning | Unit/coding |
 |---|---|---|
-| `GridID` | Grid-cell identifier used in the thermal result tables | text |
-| `run_uid`, `runid` | Analysis-run identifier retained in the original output | text |
-| `u17`, `f17`, `a17`, `g17`, `b17` | 2017 fractions assigned to urban, forest, agriculture, greenhouse, or bare surface | 0–1 |
-| `u25`, `f25`, `a25`, `g25`, `b25` | Equivalent 2025 class fractions | 0–1 |
-| `dom17`, `dom25` | Dominant endpoint class code | 1 urban; 2 forest; 3 agriculture; 4 greenhouse; 5 bare surface |
-| `dom17_lbl`, `dom25_lbl` | Short dominant-class label | U, F, A, G, B |
-| `purity17`, `purity25` | Dominant-class fraction used by the archived endpoint screen | 0–1 |
-| `changeRatio` | Within-cell endpoint class-change metric used by the archived workflow | 0–1 |
-| `validFrac17`, `validFrac25` | Valid classified fraction at each endpoint | 0–1 |
-| `commonFrac_full` | Fraction valid at both endpoints relative to the full cell | 0–1 |
-| `commonFrac_union` | Common-valid fraction relative to the valid union | 0–1 |
-| `eligible` | Passes the endpoint data-support conditions in the archived workflow | 0/1 |
-| `domSame` | Dominant endpoint class agrees between 2017 and 2025 | 0/1 |
+| `GridID` | Stable analysis-cell identifier | text |
+| `u17`, `f17`, `a17`, `g17`, `b17` | 2017 urban, forest, agriculture, greenhouse, and bare fractions | 0–1 |
+| `u25`, `f25`, `a25`, `g25`, `b25` | Corresponding 2025 class fractions | 0–1 |
+| `dom17`, `dom25` | Dominant class code | 1 U; 2 F; 3 A; 4 G; 5 B |
+| `changeRatio` | Changed common-valid pixels divided by all common-valid pixels | 0–1 |
+| `purity17`, `purity25` | Persistent dominant-class shares at the endpoints | 0–1 |
+| `validFrac17`, `validFrac25` | Valid classification support | 0–1 |
+| `commonFrac_full`, `commonFrac_union` | Common classification-support metrics | 0–1 |
 | `keep_default` | Passes the default endpoint screen | 0/1 |
-| `core_default` | Default retained-core class | UU, FF, AA, GG, BB; blank for non-retained cells |
+| `core_default` | Retained-core class | UU, FF, AA, GG, BB or missing |
 
-## Annual spectral fields
+### `endpoint_thermal_retained_cores_83.csv`
 
-| Field | Meaning | Unit / coding |
+| Field | Meaning | Unit/coding |
 |---|---|---|
-| `maxdNDVI`, `maxdNDBI`, `maxdTCB` | Maximum absolute consecutive-year change in the named spectral metric | index units |
-| `anchor_pct`, `default_anchor_pct` | Percentile used for annual threshold calibration | percentile |
-| `thr_ndvi`, `thr_ndbi`, `thr_tcb` | Calibrated threshold values in the calibration table | index units |
-| `default_thr_ndvi`, `default_thr_ndbi`, `default_thr_tcb` | Default threshold values attached to grid-level outputs | index units |
-| `unstableRatio_default` | Fraction flagged by at least one default annual spectral diagnostic | 0–1 |
-| `annualKeep_default` | Passes the default annual urban diagnostic | 0/1 |
-| `confirmedStableUrban_default` | Default UU cell retained by the annual diagnostic | 0/1 |
-| `nAnnualStableUrban` | Number of cells passing an annual-stability sensitivity combination | count |
-| `nIntersection_UU` | Number also belonging to the endpoint UU core set | count |
+| `core_default` | Retained-core group | UU, FF, AA or BB |
+| `lst2017`, `lst2025` | Mean matched-support endpoint LST | °C |
+| `dlst` | `lst2025 − lst2017` | °C |
+| `commonFrac_landsat` | Common valid thermal support | 0–1 |
+| `x_utm`, `y_utm` | Cell-centroid coordinates | metres; EPSG:32636 |
 
-## Endpoint-threshold sensitivity fields
+## Annual SCL tables
 
-| Field | Meaning | Unit / coding |
+### `annual_scl_core_stats_64.csv`
+
+| Field | Meaning | Unit/coding |
 |---|---|---|
-| `changeThr` | Endpoint within-cell change threshold represented by the row | proportion |
-| `purityThr` | Endpoint dominant-class purity threshold represented by the row | proportion |
-| `nRetained`, `nTotal` | Number of retained cells for the represented threshold/scenario | count |
-| `nUU`, `nFF`, `nAA`, `nGG`, `nBB` | Retained class counts | count |
-| `feasible` | Indicates whether the archived minimum UU/FF sample-size criterion is met | 0/1 |
+| `maxdNDVI`, `maxdNDBI`, `maxdTCB` | Maximum absolute consecutive-year change | index units |
+| `annual_pair_count` | Number of fully supported consecutive-year comparisons | count; maximum 8 |
+| `annual_full_support` | Share of 10 m pixels with all eight comparisons | 0–1 |
+| `unstableRatio_p90`, `unstableRatio_p95`, `unstableRatio_p97` | Cell share exceeding at least one percentile-specific spectral threshold | 0–1 |
+| `annual_stable_urban_p90`, `annual_stable_urban_p95`, `annual_stable_urban_p97` | Urban-core retention indicators | 0/1 |
 
-## Thermal fields
+### `annual_scl_thresholds.csv`
 
-| Field | Meaning | Unit / coding |
+| Field | Meaning |
+|---|---|
+| `anchor_percentile` | Empirical percentile used for threshold calibration |
+| `anchor_valid_pixel_count` | Fully supported pixels used in calibration |
+| `threshold_maxdNDVI`, `threshold_maxdNDBI`, `threshold_maxdTCB` | Index-specific instability thresholds |
+| `threshold_method` | Direct all-valid-pixel percentile method; no random pixel subsample |
+
+### `annual_core_vegetation_support_2017_2025.csv`
+
+`vegetation_support_frac` is the fraction of valid pixels with NDVI ≥0.20. `IVS_year` equals one minus that fraction.
+
+## Acquisition-level tables
+
+### `landsat_scene_meteorology_audit_75.csv`
+
+| Field | Meaning | Unit/coding |
 |---|---|---|
-| `scenario` | Landsat scene-support scenario | text |
-| `lst2017`, `lst2025` | Mean endpoint land surface temperature on common valid pixels | °C |
-| `dlst` | `lst2025 - lst2017` | °C |
-| `commonFrac_landsat` | Fraction with valid thermal support at both endpoints | 0–1 |
-| `x_utm`, `y_utm` | Grid-centroid coordinates | metres, EPSG:32636 |
-| `lon`, `lat` | Grid-centroid coordinates | decimal degrees |
+| `scene_id` | Landsat product identifier | text |
+| `date_utc`, `acquisition_utc` | Acquisition date/time | UTC |
+| `sensor` | Landsat 8 or Landsat 9 | text |
+| `model_scene_keep_core95` | Meets model scene-eligibility rules | 0/1 |
+| `t2m_C_aoi`, `td2m_C_aoi` | Interpolated 2 m air/dew-point temperature | °C |
+| `vpd_kPa_aoi` | Vapour-pressure deficit | kPa |
+| `wind10_mps_aoi` | 10 m wind speed | m s⁻¹ |
+| `ssrd_prev3h_Wm2_aoi` | Antecedent three-hour shortwave radiation | W m⁻² |
+| `precip_prev7d_mm_aoi`, `precip_prev30d_mm_aoi` | Antecedent precipitation | mm |
+| `sm_root_0_100_ff_background` | Forest-background 0–100 cm soil water | m³ m⁻³ |
 
-## Thermal summary and inference fields
+### `core_acquisition_panel_60acq_3823obs.csv`
 
-| Field | Meaning | Unit / coding |
+| Field | Meaning |
+|---|---|
+| `GridID`, `scene_id` | Cell and acquisition identifiers |
+| `LST_C` | Cell-level daytime LST for the acquisition |
+| `NDVI`, `NDMI` | Acquisition-specific optical diagnostics |
+| `core_scene_valid_frac` | Valid thermal coverage within the cell |
+| `core_scene_optical_valid_frac` | Valid optical coverage within the cell |
+| `block_600`, `block_1000`, `block_1500`, `block_2000` | UTM-aligned spatial-block identifiers |
+
+## Morphology and footprint tables
+
+### `morphology_scl_p95_40.csv`
+
+| Field | Meaning | Unit |
 |---|---|---|
-| `mean_dlst_UU`, `mean_dlst_FF`, `mean_dlst_AA`, `mean_dlst_BB` | Mean ΔLST for the retained class under the represented threshold/scenario | °C |
-| `sd_dlst_UU`, `sd_dlst_FF`, `sd_dlst_AA`, `sd_dlst_BB` | Standard deviation of class-specific ΔLST | °C |
-| `UU_minus_FF` | Difference between the UU and FF mean ΔLST values | °C |
-| `welch_se` | Standard error for the Welch UU–FF comparison | °C |
-| `welch_df` | Welch–Satterthwaite degrees of freedom | numeric |
-| `welch_ci_low`, `welch_ci_high` | Lower and upper limits of the reported Welch confidence interval | °C |
-| `welch_p` | Welch comparison p-value | probability |
+| `BCR_2025_pct` | 2025-aligned building-footprint area divided by cell area | % |
+| `p75_storeys` | Within-cell 75th percentile of building-level storey counts | storeys |
+| `IVS_median_2017_2025` | Median annual inverse vegetation support | 0–1 |
+| `delta_LST_C` | Matched-support endpoint LST change | °C |
+| `functional_label_en` | Descriptive local functional context | text |
 
-## Landsat scene metadata
+### `manual_footprint_audit_47.csv`
 
-`landsat_scene_metadata.csv` records the metadata retained for the six primary Landsat scenes. Important fields include `date_acquired`, `landsat_product_id`, `landsat_scene_id`, `processing_level`, `spacecraft_id`, `sensor_id`, `scene_center_time_utc`, `cloud_cover`, `wrs_path`, and `wrs_row`.
+| Field | Meaning | Unit |
+|---|---|---|
+| `added_m2`, `removed_m2` | Manually audited footprint additions/removals | m² |
+| `net_change_m2` | Added minus removed footprint | m² |
 
-## Reference-class summary
+### `morphology_footprint_audit_scl_p95_40.csv`
 
-`reference_class_lulc_lst_summary.csv` contains the archived reference-class LST summaries. Important fields include `reference_name`, `reference_year`, `class_code`, `class_name`, `lst2017_mean_c`, `lst2025_mean_c`, `dlst_mean_c`, `common_valid_fraction`, and `n_landsat_pixels_common`.
+| Field | Meaning | Unit |
+|---|---|---|
+| `BCR_2025_pct` | Current building coverage ratio | % |
+| `delta_BCR_pp` | Net footprint change divided by 90,000 m² | percentage points |
+| `BCR_baseline_proxy_pct` | Current BCR minus net BCR change | % |
+| `turnover_pp` | Added plus removed area divided by 90,000 m² | percentage points |
+| `any_footprint_change` | At least one addition or removal detected | Boolean |
 
-## Export-only fields
+## Geometry and system fields
 
-Fields such as `system:index`, `.geo`, and legacy `Shape_*` attributes are retained from the original exports. They are auxiliary provenance/GIS fields rather than primary analytical variables.
+Some GEE-exported tables retain `.geo`, `system:index`, run identifiers, and duplicate source fields for provenance. They are not independent analytical variables.

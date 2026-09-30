@@ -1,0 +1,4 @@
+system:index,anchor_percentile,anchor_valid_pixel_count,cloud_mask_method,run_uid,threshold_maxdNDBI,threshold_maxdNDVI,threshold_maxdTCB,threshold_method,.geo
+0,90,74431,SCL_2_4_5_6,20260920_revision_exact_v03,0.1211222447454929,0.1788347363471985,0.180881,all_valid_anchor_pixels_direct_percentile,"{""type"":""MultiPoint"",""coordinates"":[]}"
+1,95,74431,SCL_2_4_5_6,20260920_revision_exact_v03,0.1511067319661378,0.2383859455585479,0.274189,all_valid_anchor_pixels_direct_percentile,"{""type"":""MultiPoint"",""coordinates"":[]}"
+2,97,74431,SCL_2_4_5_6,20260920_revision_exact_v03,0.1757030226290226,0.2841136157512665,0.3606784999999999,all_valid_anchor_pixels_direct_percentile,"{""type"":""MultiPoint"",""coordinates"":[]}"
