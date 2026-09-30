@@ -1,6 +1,6 @@
 relative_path,size_bytes
 .gitignore,56
-CHANGELOG.md,1780
+CHANGELOG.md,2040
 CITATION.cff,1120
 LICENSE_CODE,1087
 LICENSE_DATA,458
@@ -26,7 +26,7 @@ docs/ASSET_MANIFEST.md,2310
 docs/DATA_DICTIONARY.md,6340
 docs/REPOSITORY_SCOPE.md,3115
 docs/RUNNING_THE_CODE.md,3021
-docs/VALIDATION_REPORT.md,2075
+docs/VALIDATION_REPORT.md,2074
 requirements.txt,44
 results/meteorological_cluster_sensitivity.csv,2568
 results/meteorological_definition_sensitivity.csv,1785

@@ -1,6 +1,6 @@
 # Release checks
 
-Validation was completed on 29 September 2026 before packaging version 2.0.1.
+Validation was repeated on 30 September 2026 before packaging version 2.0.2.
 
 ## Local released-table checks
 

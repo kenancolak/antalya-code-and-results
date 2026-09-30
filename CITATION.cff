@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this code or the derived data, please cite the archived repository release and the associated article."
 title: "Reproducibility package for Urban–Forest Land Surface Temperature Change under Stability and Purity Constraints: Antalya, 2017–2025"
 type: software
-version: 2.0.1
-date-released: 2026-09-29
+version: 2.0.2
+date-released: 2026-09-30
 doi: 10.5281/zenodo.21836778
 authors:
   - family-names: "Çolak"

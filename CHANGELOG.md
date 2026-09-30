@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.2 — 2026-09-30
+
+- Removed legacy v1 files that remained in the GitHub working tree after the v2.0.1 browser upload.
+- Updated the release metadata, file manifest, and checksums. The analytical code, released data, and reported results are unchanged.
+
 ## 2.0.1 — 2026-09-29
 
 - Separated endpoint screening from the optional current-catalogue Random Forest diagnostic in GEE Script 01.
